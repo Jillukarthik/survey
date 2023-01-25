@@ -1,38 +1,143 @@
-.App {
-  text-align: center;
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Roboto&display=swap");
+
+.survey {
+  position: relative;
+  top: 12px;
+  margin: auto;
+  width: 60%;
+  border: 3px solid;
+  padding: 10px;
+  border: none;
+  height: 90vh;
+  background-color: #f4f7fc;
+  font-family: "Roboto";
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: 0.004em;
+  text-align: left;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.survey__card {
+  margin-left: 42px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.survey__header {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-between;
 }
 
-.App-link {
-  color: #61dafb;
+.survey__topic {
+  width: 112px;
+  height: 18px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 1000;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.004em;
+  background-color: #dddeff;
+  color: #414042;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.survey__icon {
+  height: 14px;
+  width: 20px;
+  left: 2px;
+  top: 5px;
+  border-radius: 0px;
+  color: #414042;
+  box-sizing: border-box;
+  width: 25px;
+  height: 25px;
+  background: #ffffff;
+  border: 1px solid #efefef;
+  border-radius: 2px;
+}
+
+.survey__question {
+  width: 70%;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.0015em;
+  color: #190041;
+  border-radius: 4px;
+}
+
+.previewsurvey__question {
+  width: 70%;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.0015em;
+  color: #190041;
+  border-radius: 4px;
+  border: none;
+}
+
+.survey__answer {
+  position: relative;
+  top: 20px;
+  height: 300px;
+  overflow-y: scroll;
+}
+
+.survey__input {
+  width: 70%;
+  height: 35px;
+  margin-top: 12px;
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.previewsurvey__input {
+  width: 70%;
+  height: 35px;
+  margin-top: 12px;
+  background: #ffffff;
+  border-radius: 4px;
+  border: none;
+}
+
+.button__addtask {
+  position: relative;
+  top: 72px;
+  left: 12%;
+  width: 25px;
+}
+
+.button__handledelete {
+  color: red;
+  background-color: #f4f7fc;
+}
+.previewbutton__handledelete {
+  display: none;
+}
+
+.button {
+  width: 86px;
+  height: 32px;
+}
+.button__submit {
+  position: relative;
+  top: 90px;
+  float: right;
+  right: 94px;
+  border: none;
+  background-color: #6f73d2;
+  border-radius: 4px;
+  color: #ffffff;
+}
+
+.button__handledelete {
+  display: none;
+}
+
+.survey__items:hover .button__handledelete {
+  display: inline;
 }
