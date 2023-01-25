@@ -6,9 +6,18 @@ export default function App() {
   const [question, setQuestion] = useState("");
   const [task, addTask] = useState([]);
   const [preview, setPreview] = useState(true);
+
+  //adding input
   const handleAdd = () => {
     const abc = [...task, []];
     addTask(abc);
+  };
+
+  let arrcheckBox = [];
+
+  const handleCheckbox = (e) => {
+    const value = e.target.value;
+    arrcheckBox.push(value);
   };
 
   const handleChange = (onChangeValue, i) => {
@@ -24,10 +33,14 @@ export default function App() {
   };
 
   const showData = (event) => {
-    console.log(JSON.stringify("question:" + question));
-    task.map((x) => {
-      console.log(JSON.stringify("option:" + x));
-    });
+    let res = Object.assign({}, [...task]);
+    console.log(
+      JSON.stringify({
+        question: question,
+        options: res,
+        selected: arrcheckBox,
+      })
+    );
   };
 
   const previewData = () => {
@@ -57,12 +70,21 @@ export default function App() {
           <ol type="A" className="survey__list">
             {task.map((data, i) => (
               <li key={i} className="survey__items">
+                {!preview && (
+                  <input
+                    value={data}
+                    type="checkbox"
+                    name="mycheckboxes"
+                    onChange={handleCheckbox}
+                  />
+                )}
                 <input
                   className={preview ? "survey__input" : "previewsurvey__input"}
                   value={data}
                   disabled={!preview}
                   onChange={(e) => handleChange(e, i)}
                 />
+
                 <AiFillDelete
                   onClick={() => handleDelete(i)}
                   button__handledelete
