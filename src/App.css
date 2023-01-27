@@ -78,6 +78,7 @@
   color: #190041;
   border-radius: 4px;
   border: none;
+  background-color: #ffffff;
 }
 
 .survey__answer {
@@ -102,6 +103,9 @@
   background: #ffffff;
   border-radius: 4px;
   border: none;
+  margin-left: 30px;
+  position: relative;
+  top: -39px;
 }
 
 .button__addtask {
@@ -140,4 +144,20 @@
 
 .survey__items:hover .button__handledelete {
   display: inline;
+}
+
+
+.previewerror__message{
+ position: relative;
+ top:-35px;
+ color: red;
+ left: 12px;
+}
+
+
+.error__message{
+  position: relative;
+  top: 0px;
+  left: 18px;
+  color: red;
 }
