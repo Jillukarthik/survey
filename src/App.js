@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import "./App.css";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 
 export default function App() {
   const [question, setQuestion] = useState("");
@@ -29,8 +29,11 @@ export default function App() {
 
     console.log(selected);
     if (value) {
-      arrcheckBox.push(selected);
+      let element = arrcheckBox.push(selected);
+      let unique = new Set(element);
+      console.log(unique);
     }
+    return [];
   };
 
   const previewData = () => {
