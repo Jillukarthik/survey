@@ -2,60 +2,48 @@ import React, { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import "./App.css";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 
 export default function App() {
   const [question, setQuestion] = useState("");
-  const [task, addTask] = useState([]);
   const [preview, setPreview] = useState(true);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
 
-  //adding input
-  const handleAdd = () => {
-    const abc = [...task, []];
-    addTask(abc);
-  };
+  const { register, control, handleSubmit, reset, watch } = useForm({
+    defaultValues: {
+      test: { firstName: "Bill" },
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "test",
+  });
 
   let arrcheckBox = [];
 
-  const handleCheckbox = (e) => {
-    const value = e.target.value;
-    arrcheckBox.push(value);
-  };
+  const handleCheckbox = (e, index) => {
+    const value = e.target.checked;
+    // console.log(value);
 
-  const handleChange = (onChangeValue, i) => {
-    const inputdata = [...task];
-    inputdata[i] = onChangeValue.target.value;
-    addTask(inputdata);
-  };
+    let selected = fields[index].firstName;
 
-  const handleDelete = (i) => {
-    const deletVal = [...task];
-    deletVal.splice(i, 1);
-    addTask(deletVal);
-  };
-
-  const showData = (event) => {
-    let res = Object.assign({}, [...task]);
-    console.log(
-      JSON.stringify({
-        question: question,
-        options: res,
-        selected: arrcheckBox,
-      })
-    );
+    console.log(selected);
+    if (value) {
+      arrcheckBox.push(selected);
+    }
   };
 
   const previewData = () => {
     setPreview(!preview);
   };
-  const onSubmit = (data) => console.log(data);
-
-  // console.log(watch("example"));
+  const onsubmit = (data) =>
+    console.log(
+      JSON.stringify({
+        question: question,
+        Option: data,
+        selected: arrcheckBox,
+      })
+    );
 
   return (
     <div className="survey">
@@ -79,39 +67,29 @@ export default function App() {
 
         <div className="survey__answer">
           <ol type="A" className="survey__list">
-            {task.map((data, i) => (
-              <li key={i} className="survey__items">
+            {fields.map((item, index) => (
+              <li key={item.id} className="survey__items">
                 {!preview && (
                   <input
-                    value={data}
+                    style={{ accentColor: "#6F73D2" }}
+                    // value={item.defaultValue}
+                    ch
                     type="checkbox"
                     name="mycheckboxes"
-                    onChange={handleCheckbox}
+                    onChange={(e) => handleCheckbox(e, index)}
                   />
                 )}
-                <form id="hook-form" onSubmit={handleSubmit(onSubmit)}>
+                <form id="hook-form" onSubmit={handleSubmit(onsubmit)}>
                   <input
-                    {...register(`option-${i}`, { required: true })}
+                    {...register(`test.${index}.firstName`, { required: true })}
                     className={
                       preview ? "survey__input" : "previewsurvey__input"
                     }
-                    value={data}
                     disabled={!preview}
-                    onChange={(e) => handleChange(e, i)}
                   />
-                  {errors[`option-${i}`] && (
-                    <span
-                      className={
-                        preview ? "error__message" : "previewerror__message"
-                      }
-                    >
-                      This field is required!!!
-                    </span>
-                  )}
                 </form>
-
                 <AiFillDelete
-                  onClick={() => handleDelete(i)}
+                  onClick={() => remove(index)}
                   className={
                     preview
                       ? "button__handledelete"
@@ -127,7 +105,9 @@ export default function App() {
       <div>
         <button
           className="button button__addtask"
-          onClick={handleAdd}
+          onClick={() => {
+            append({ firstName: "" });
+          }}
           disabled={!preview}
         >
           add choice
@@ -138,7 +118,7 @@ export default function App() {
           type="submit"
           form="hook-form"
           className="button button__submit"
-          onClick={showData}
+          // onClick={onsubmit}
         >
           save
         </button>
