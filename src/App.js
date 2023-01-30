@@ -29,9 +29,7 @@ export default function App() {
 
     console.log(selected);
     if (value) {
-      let element = arrcheckBox.push(selected);
-      let unique = new Set(element);
-      console.log(unique);
+      arrcheckBox.push(selected);
     }
     return [];
   };
@@ -75,8 +73,6 @@ export default function App() {
                 {!preview && (
                   <input
                     style={{ accentColor: "#6F73D2" }}
-                    // value={item.defaultValue}
-                    ch
                     type="checkbox"
                     name="mycheckboxes"
                     onChange={(e) => handleCheckbox(e, index)}
@@ -121,7 +117,6 @@ export default function App() {
           type="submit"
           form="hook-form"
           className="button button__submit"
-          // onClick={onsubmit}
         >
           save
         </button>
