@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import "./App.css";
@@ -22,7 +22,7 @@ export default function App() {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name2: "question",
+    question: "question",
     name: "test",
     rules: {
       maxLength: {
@@ -32,25 +32,11 @@ export default function App() {
     },
   });
 
-  // console.log(fields.length);
-  let arrcheckBox = [];
-  const handleCheckbox = (e, index) => {
-    var value = e.target.checked;
-    let selected = fields[index].firstName;
-    // console.log(selected);
-    if (value) {
-      arrcheckBox.push(selected);
-    }
-    return [];
-  };
-
-  //checkbox
   const handleCheckboxChange = (event) => {
-    setSelectedCheckboxes(
-      event.target.checked
-        ? [...selectedCheckboxes, event.target.value]
-        : selectedCheckboxes.filter((value) => value !== event.target.value)
-    );
+    const handleCheckboxAlert = event.target.checked
+      ? [...selectedCheckboxes, event.target.value]
+      : selectedCheckboxes.filter((value) => value !== event.target.value);
+    setSelectedCheckboxes(handleCheckboxAlert);
   };
 
   const previewData = () => {
@@ -58,16 +44,31 @@ export default function App() {
   };
 
   const onsubmit = (data) => {
+    let selectedCheckbox = [];
+    let surveyOption = [];
+    let question = data.question;
+    data.test.map((x) => {
+      if (x.checkbox == "on") {
+        selectedCheckbox.push(x.option);
+      }
+    });
+
+    data.test.map((x) => {
+      if (x.option) {
+        surveyOption.push(x.option);
+      }
+    });
+
     console.log(
       JSON.stringify({
-        data,
-        selected: arrcheckBox,
+        question: question,
+        option: surveyOption,
+        selected: selectedCheckbox,
       })
     );
-    console.log(data);
-    // console.log(selectedCheckboxes.length);
+
     if (!preview && selectedCheckboxes.length === 0) {
-      alert("no input is selected");
+      alert("please select atleast one of the field");
     }
   };
 
@@ -84,75 +85,82 @@ export default function App() {
           </p>
         </div>
 
-        <input
-          {...register("question", {
-            required: {
-              value: true,
-              message: "Required field!!!",
-            },
-            pattern: {
-              value: /[A-Za-z]/,
-              message: "please enter the valid!!!",
-            },
-          })}
-          className={preview ? "survey__question" : "previewsurvey__question"}
-          disabled={!preview}
-        />
-        {errors.question && (
-          <span style={{ color: "red" }}>{errors.question.message}</span>
-        )}
         <div className="survey__answer">
           <ol type="A" className="survey__list">
-            {fields.map((item, index) => (
-              <li key={item.id} className="survey__items">
-                {!preview && (
-                  <input
-                    style={{ accentColor: "#6F73D2" }}
-                    type="checkbox"
-                    name="mycheckboxes"
-                    onChange={
-                      ((e) => handleCheckbox(e, index),
-                      (e) => handleCheckboxChange(e))
-                    }
-                  />
-                )}
-                <form id="hook-form" onSubmit={handleSubmit(onsubmit)}>
-                  <input
-                    {...register(`test.${index}.firstName`, {
-                      required: {
-                        value: true,
-                        message: "Required field!!!",
-                      },
-                      pattern: {
-                        value: /[A-Za-z]/,
-                        message: "please enter the valid!!!",
-                      },
-                      maxLength: {
-                        value: 20,
-                        message: "should not exceed 10!!!",
-                      },
-                    })}
-                    className={
-                      preview ? "survey__input" : "previewsurvey__input"
-                    }
-                    disabled={!preview}
-                  />
-                  {errors.test?.[index]?.firstName && (
-                    <span style={{ color: "red" }}>
-                      {errors.test?.[index]?.firstName.message}
-                    </span>
-                  )}
-                </form>
-                <AiFillDelete
-                  onClick={() => remove(index)}
-                  className={
-                    preview
-                      ? "button__handledelete"
-                      : "previewbutton__handledelete"
-                  }
-                />
-              </li>
-            ))}
+            <form id="hook-form" onSubmit={handleSubmit(onsubmit)}>
+              <input
+                {...register("question", {
+                  required: {
+                    value: true,
+                    message: "Required field!!!",
+                  },
+                  pattern: {
+                    value: /[A-Za-z]/,
+                    message: "please enter the valid!!!",
+                  },
+                })}
+                className={
+                  preview ? "survey__question" : "previewsurvey__question"
+                }
+                disabled={!preview}
+              />
+              {errors.question && (
+                <span style={{ color: "red" }}>{errors.question.message}</span>
+              )}
+              {fields.map((item, index) => {
+                const id = `test.${index}.checkbox`;
+                return (
+                  <li key={item.id} className="survey__items">
+                    {!preview && (
+                      <input
+                        className="survey__checkbox"
+                        type="checkbox"
+                        value="on"
+                        id={id}
+                        {...register(id)}
+                        defaultChecked={fields.checked}
+                        onChange={(e) => handleCheckboxChange(e)}
+                      />
+                    )}
+
+                    <input
+                      {...register(`test.${index}.option`, {
+                        required: {
+                          value: true,
+                          message: "Required field!!!",
+                        },
+                        pattern: {
+                          value: /[A-Za-z]/,
+                          message: "please enter the valid!!!",
+                        },
+                        maxLength: {
+                          value: 20,
+                          message: "should not exceed 10!!!",
+                        },
+                      })}
+                      className={
+                        preview ? "survey__input" : "previewsurvey__input"
+                      }
+                      disabled={!preview}
+                    />
+                    {errors.test?.[index]?.option && (
+                      <span style={{ color: "red" }}>
+                        {errors.test?.[index]?.option.message}
+                      </span>
+                    )}
+
+                    <AiFillDelete
+                      onClick={() => remove(index)}
+                      className={
+                        preview
+                          ? "button__handledelete"
+                          : "previewbutton__handledelete"
+                      }
+                    />
+                  </li>
+                );
+              })}
+            </form>
           </ol>
         </div>
       </div>
@@ -160,7 +168,7 @@ export default function App() {
         <button
           className="button button__addtask"
           onClick={() => {
-            append();
+            append({ option: "" });
           }}
           disabled={!preview || (fields.length === 5 && true)}
         >
