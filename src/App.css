@@ -99,13 +99,13 @@
 .previewsurvey__input {
   width: 70%;
   height: 35px;
-  margin-top: 12px;
+  margin-top: 45px;
   background: #ffffff;
   border-radius: 4px;
   border: none;
   margin-left: 30px;
   position: relative;
-  top: -39px;
+  /* top: -39px; */
 }
 
 .button__addtask {
@@ -146,18 +146,21 @@
   display: inline;
 }
 
-
-.previewerror__message{
- position: relative;
- top:-35px;
- color: red;
- left: 12px;
+.previewerror__message {
+  position: relative;
+  top: -35px;
+  color: red;
+  left: 12px;
 }
 
-
-.error__message{
+.error__message {
   position: relative;
   top: 0px;
   left: 18px;
   color: red;
+}
+
+.survey__checkbox {
+  position: relative;
+  top: 2px;
 }
