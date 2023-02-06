@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import "./App.css";
@@ -6,7 +6,6 @@ import { useForm, useFieldArray } from "react-hook-form";
 
 export default function App() {
   const [preview, setPreview] = useState(true);
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 
   const {
     register,
@@ -32,13 +31,6 @@ export default function App() {
     },
   });
 
-  const handleCheckboxChange = (event) => {
-    const handleCheckboxAlert = event.target.checked
-      ? [...selectedCheckboxes, event.target.value]
-      : selectedCheckboxes.filter((value) => value !== event.target.value);
-    setSelectedCheckboxes(handleCheckboxAlert);
-  };
-
   const previewData = () => {
     setPreview(!preview);
   };
@@ -47,13 +39,20 @@ export default function App() {
     let selectedCheckbox = [];
     let surveyOption = [];
     let question = data.question;
-    data.test.map((x) => {
-      if (x.checkbox == "on") {
+
+    //getting selected checkbox
+    data.test.filter((x) => {
+      if (x.checkbox) {
         selectedCheckbox.push(x.option);
       }
     });
 
-    data.test.map((x) => {
+    //alert when no input is selected
+    if (!preview && selectedCheckbox.length === 0) {
+      alert("please select atleast one of the field");
+    }
+
+    data.test.filter((x) => {
       if (x.option) {
         surveyOption.push(x.option);
       }
@@ -66,10 +65,7 @@ export default function App() {
         selected: selectedCheckbox,
       })
     );
-
-    if (!preview && selectedCheckboxes.length === 0) {
-      alert("please select atleast one of the field");
-    }
+    // console.log(data);
   };
 
   return (
@@ -116,10 +112,8 @@ export default function App() {
                         className="survey__checkbox"
                         type="checkbox"
                         value="on"
-                        id={id}
                         {...register(id)}
                         defaultChecked={fields.checked}
-                        onChange={(e) => handleCheckboxChange(e)}
                       />
                     )}
 
